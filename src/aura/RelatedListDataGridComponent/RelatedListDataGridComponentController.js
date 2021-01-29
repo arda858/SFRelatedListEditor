@@ -107,9 +107,17 @@
         }
     },
     createItem : function(component, event, helper){
+ 		var recordTypeId = event.getSource().get('v.value');
+
         var createRecordEvent = $A.get("e.force:createRecord");
         createRecordEvent.setParams({
-            "entityApiName": component.get("v.relatedObjectName")
+            "entityApiName": component.get("v.relatedObjectName"),
+            "recordTypeId":recordTypeId,
+            "defaultFieldValues": {
+                'Target_Lead__c' : component.get("v.recordId"),
+                'Lead__c' : component.get("v.recordId")
+                
+            }
         });
         
         createRecordEvent.fire();
