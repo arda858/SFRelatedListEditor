@@ -37,6 +37,16 @@
                 var gridContainer = component.find("gridContainer");
                 $A.util.toggleClass(gridContainer, "hidden");        
                 component.set("v.items", res.getReturnValue()); 
+                
+                //Start Edit mode
+                component.set("v.oldItems", res.getReturnValue());
+                 //Refresh the items
+                this.refreshItems(component, component.get("v.items"), "write");               
+                //Refresh the UI elements(Edit button and actions)
+                this.refreshUIElements(component, event);
+                
+                
+
             }
             else if (res.getState() === "ERROR") {
                 $A.log("Errors", res.getError());
