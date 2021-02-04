@@ -34,11 +34,13 @@
         dataAction.setCallback(this, function(res) {                        
             if (res.getState() === "SUCCESS") {                 
                 var gridContainer = component.find("gridContainer");
-                $A.util.toggleClass(gridContainer, "hidden");        
-                component.set("v.items", res.getReturnValue().sort((a, b) => (a.Name > b.Name) ? 1 : -1)); 
-                
+                $A.util.toggleClass(gridContainer, "hidden");   
+                if (res.getReturnValue() != null){
+                    res.getReturnValue().sort((a, b) => (a.Name > b.Name) ? 1 : -1)
+                }
+                component.set("v.items", res.getReturnValue() ); 
                 //Start Edit mode
-                component.set("v.oldItems", res.getReturnValue());
+                component.set("v.oldItems",  res.getReturnValue()); 
                  //Refresh the items
                 this.refreshItems(component, component.get("v.items"), "write");               
                 //Refresh the UI elements(Edit button and actions)
@@ -64,10 +66,12 @@
         dataAction.setCallback(this, function(res) {                        
             if (res.getState() === "SUCCESS") {                 
                 var gridContainer = component.find("gridContainer");
-                component.set("v.items", res.getReturnValue().sort((a, b) => (a.Name > b.Name) ? 1 : -1)); 
-                
+                if (res.getReturnValue() != null){
+                    res.getReturnValue().sort((a, b) => (a.Name > b.Name) ? 1 : -1)
+                }
+                component.set("v.items", res.getReturnValue() ); 
                 //Start Edit mode
-                component.set("v.oldItems", res.getReturnValue());
+                component.set("v.oldItems",  res.getReturnValue()); 
                  //Refresh the items
                 this.refreshItems(component, component.get("v.items"), "write");               
  
@@ -78,6 +82,23 @@
         });   
         
         $A.enqueueAction(dataAction);    
+    },
+    deleteEmptyItems : function(component,deleteCallback){
+        //Load items from Salesforce
+        var deleteAction = component.get("c.deleteEmptyRelatedListItems");
+
+        deleteAction.setParams({
+            "objectId": component.get("v.recordId"),
+            "relatedlistName": component.get("v.relatedListName")
+        });	
+        
+        deleteAction.setCallback(this, function(res) {            
+            deleteCallback(res.getState(), res.getError());
+        });   
+        console.log(deleteAction)
+
+        $A.enqueueAction(deleteAction);
+        
     },
     refreshItems : function(component, items, displayMode){
         //Set the display mode
@@ -139,13 +160,15 @@
         
         $A.enqueueAction(saveItemsAction);
     },
-    createAndAddItem : function(component, items, recordTypeId, createCallback){
+    createAndAddItem : function(component, recordTypeId, createCallback){
         //Save items on Salesforce
         
         var newItem = {
             'objName' : component.get("v.relatedObjectName"),
             'RecordTypeId' : recordTypeId,
 			'Target_Lead__c' : component.get("v.recordId"),
+            'Lead__c' : component.get("v.recordId"),
+
         }
 		
             

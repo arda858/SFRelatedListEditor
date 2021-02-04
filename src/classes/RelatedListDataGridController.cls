@@ -249,6 +249,45 @@ public with sharing class RelatedListDataGridController {
         update sObjectsItems;
         return true;
     } 
+    /**
+    * Delete empty related list items
+    * */
+    @AuraEnabled
+    public static boolean deleteEmptyRelatedListItems(String objectId,String relatedlistName )
+    {  
+        List<SObject> sObjectsItems = new List<SObject>();
+         
+        Object[] items = getReleatedListItems(objectId,relatedlistName);
+        for(Object obj : items) {
+            Map<String, Object> mObj = (Map<String, Object>)obj;
+            
+            //Init the SObject instance
+            Id objId = (Id)mObj.get('Id');
+            Schema.SObjectType objType = objId.getSobjectType();
+            SObject sObj = objType.newSObject(objId);
+            
+            //Check blank fields
+            //Source Account blank , delete (Investor)
+            if(objType.getDescribe().getName() == 'Investor_c' && mObj.get('Source_Account__c') == null){
+                sObjectsItems.add(sObj);
+            }
+            
+            //Competitor/Lender	blank, delete (Competitor/Lender)
+            if(objType.getDescribe().getName() == 'Competitor_Committee_Current_Lender__c' && mObj.get('Competitor_Committee_Lender_Account__c') == null){
+                sObjectsItems.add(sObj);
+            }
+            
+            //Vendor Account blank, delete (Vendor Relationship)
+            if(objType.getDescribe().getName() == 'Vendor_Relationship__c' && mObj.get('Vendor__c') == null  && mObj.get('Description__c') == null){
+                sObjectsItems.add(sObj);
+            }
+            
+            
+        }
+        
+        delete sObjectsItems;
+        return true;
+    } 
 
 	/**
     * Create new list item

@@ -45,7 +45,37 @@
         //Refresh the UI elements(Edit button and actions)
         helper.refreshUIElements(component, event);
     },
-    cancelEdit : function(component, event, helper) {         
+    cancelEdit : function(component, event, helper) { 
+        
+         //OnSave items callback
+            function deleteCallback(status, errors){
+                if(status=="SUCCESS"){
+                    //Refresh the items                   
+                    helper.loadItemsAfterNew(component);      
+                }
+                if(status=="ERROR"){                      
+                    var errMsg = null;
+                    
+                    if(errors[0] && errors[0].message){
+                        errMsg = errors[0].message;
+                    } 
+                    if(errors[0] && errors[0].pageErrors) {
+                        errMsg = errors[0].pageErrors[0].message;
+                    }
+                    
+                    var toastEvent = $A.get("e.force:showToast");
+                    toastEvent.setParams({
+                        "title": "Error!",
+                        "type" : "error",
+                        "mode" : "sticky",
+                        "message": "Server Error:" + errMsg
+                    });
+                    toastEvent.fire();                    
+                }
+            }        
+        
+        
+		helper.deleteEmptyItems(component,deleteCallback)        
         helper.refreshItems(component, component.get("v.oldItems"), "read");                       
         helper.refreshUIElements(component, event);        
     },
@@ -125,7 +155,6 @@
     createAndAddItem : function(component, event, helper){
 
             //Update the items
-            var items = helper.updateItems(component);
         	var recordTypeId = event.getSource().get('v.value');
 
             //OnSave items callback
@@ -156,7 +185,7 @@
             }        
             
             //Save items in the backend
-            helper.createAndAddItem(component, items, recordTypeId, createCallback);
+            helper.createAndAddItem(component, recordTypeId, createCallback);
        
     }
 })
