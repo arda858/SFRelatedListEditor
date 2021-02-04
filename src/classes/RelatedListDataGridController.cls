@@ -133,6 +133,7 @@ public with sharing class RelatedListDataGridController {
     {            
         Object[] items = RestAPIUtils.getRelatedListItems(objectId, 
                                                               relatedlistName);
+        
         if(items.size()>0){        
             Id firstChildId = (Id)((Map<String, Object>) items.get(0)).get('Id');            
         	DescribeSObjectResult objectDescResult = firstChildId.getSobjectType().getDescribe();
@@ -246,6 +247,40 @@ public with sharing class RelatedListDataGridController {
         }
         
         update sObjectsItems;
+        return true;
+    } 
+
+	/**
+    * Create new list item
+    * */
+    @AuraEnabled
+    public static boolean createNewItem(String jsonData)
+    {	
+        
+        
+        Object obj = (Object)JSON.deserializeUntyped(jsonData);
+        
+        Map<String, Object> mObj = (Map<String, Object>)obj;
+        String objName = mObj.get('objName').toString();
+        
+        //Init the SObject instance
+        SObjectType objType = ((SObject) Type.forName(objName).newInstance())
+                                  .getSObjectType();
+        SObject sObj = objType.newSObject();
+        
+        //Update the fields
+        for(String field : mObj.keySet()){
+            Schema.SObjectField sfield = objType.getDescribe().fields.getMap().get(field);
+            if(sfield != null && sfield.getDescribe().isUpdateable()){
+                
+                sObj.put(field, mObj.get(field));                    
+                
+            }                    
+        }
+        
+        
+        
+        insert sObj;
         return true;
     } 
     

@@ -30,21 +30,22 @@
                                       label="Edit" />
                 <aura:if isTrue="{!v.relatedListLabel=='Vendor Relationships'}">
                     <lightning:button aura:id="createButton"
-                                      onclick="{! c.createItem }"
+                                      onclick="{! c.createAndAddItem }"
                                       label="New Vendor" />
                 </aura:if>              
                 <aura:if isTrue="{!v.relatedListLabel=='Investors'}">
-                    <lightning:button aura:id="createButton"
-                                      onclick="{! c.createItem }"
+                    <lightning:button aura:id="createButton" 
+                                      onclick="{! c.createAndAddItem }"
+                                      value = "0123Z0000015JXpQAM"
                                       label="New Investor" />
                 </aura:if>
                 <aura:if isTrue="{!v.relatedListLabel=='Competitors/Lenders'}">
                     <lightning:button aura:id="createButton"
-                                      onclick="{! c.createItem }"
+                                      onclick="{! c.createAndAddItem }"
                                       value="0123Z0000015JYOQA2"                                                          				
                                       label="New Lender" />
                     <lightning:button aura:id="createButton"
-                                      onclick="{! c.createItem }"
+                                      onclick="{! c.createAndAddItem }"
                                       value="0123Z0000015JYEQA2"                                                          				
                                       label="New Competitor" />
                 </aura:if>           

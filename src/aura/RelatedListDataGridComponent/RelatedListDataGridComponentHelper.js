@@ -31,12 +31,11 @@
             "objectId": component.get("v.recordId"),
             "relatedlistName": component.get("v.relatedListName")
         });	
-        
         dataAction.setCallback(this, function(res) {                        
             if (res.getState() === "SUCCESS") {                 
                 var gridContainer = component.find("gridContainer");
                 $A.util.toggleClass(gridContainer, "hidden");        
-                component.set("v.items", res.getReturnValue()); 
+                component.set("v.items", res.getReturnValue().sort((a, b) => (a.Name > b.Name) ? 1 : -1)); 
                 
                 //Start Edit mode
                 component.set("v.oldItems", res.getReturnValue());
@@ -47,6 +46,31 @@
                 
                 
 
+            }
+            else if (res.getState() === "ERROR") {
+                $A.log("Errors", res.getError());
+            }
+        });   
+        
+        $A.enqueueAction(dataAction);    
+    },
+    loadItemsAfterNew : function(component){
+        //Load items from Salesforce
+        var dataAction = component.get("c.getReleatedListItems");
+        dataAction.setParams({
+            "objectId": component.get("v.recordId"),
+            "relatedlistName": component.get("v.relatedListName")
+        });	
+        dataAction.setCallback(this, function(res) {                        
+            if (res.getState() === "SUCCESS") {                 
+                var gridContainer = component.find("gridContainer");
+                component.set("v.items", res.getReturnValue().sort((a, b) => (a.Name > b.Name) ? 1 : -1)); 
+                
+                //Start Edit mode
+                component.set("v.oldItems", res.getReturnValue());
+                 //Refresh the items
+                this.refreshItems(component, component.get("v.items"), "write");               
+ 
             }
             else if (res.getState() === "ERROR") {
                 $A.log("Errors", res.getError());
@@ -104,7 +128,7 @@
     saveItems : function(component, items, saveCallback){
         //Save items on Salesforce
         var saveItemsAction = component.get("c.saveRelatedListItems");
-        
+        console.log(component.get("v.items"))
         saveItemsAction.setParams({
             "jsonData": JSON.stringify(component.get("v.items"))
         });	
@@ -114,5 +138,28 @@
         });   
         
         $A.enqueueAction(saveItemsAction);
+    },
+    createAndAddItem : function(component, items, recordTypeId, createCallback){
+        //Save items on Salesforce
+        
+        var newItem = {
+            'objName' : component.get("v.relatedObjectName"),
+            'RecordTypeId' : recordTypeId,
+			'Target_Lead__c' : component.get("v.recordId"),
+        }
+		
+            
+        console.log(newItem)
+        var createAndAddItemAction = component.get("c.createNewItem");
+        
+        createAndAddItemAction.setParams({
+            "jsonData": JSON.stringify(newItem)
+        });	
+        
+        createAndAddItemAction.setCallback(this, function(res) {            
+            createCallback(res.getState(), res.getError());
+        });   
+        
+        $A.enqueueAction(createAndAddItemAction);
     }
 })
