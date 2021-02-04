@@ -89,7 +89,7 @@ public with sharing class RelatedListDataGridController {
     * Return the list of related metadata information
     * */
     @AuraEnabled
-    public static Object[] getReleatedListsMetadata(Id objectId)
+    public static Object[] getRelatedListsMetadata(Id objectId)
     {
         String recordTypeName = RestAPIUtils.getObjectRecordTypeName(objectId);
         Object[] relatedListsMetatdata = RestAPIUtils.getRelatedListsMetadata(objectId, 
@@ -106,7 +106,7 @@ public with sharing class RelatedListDataGridController {
     * Return the metadata of the related list
     * */
     @AuraEnabled
-    public static Object getReleatedListMetadata(Id objectId, 
+    public static Object getRelatedListMetadata(Id objectId, 
                                                  String relatedListLabel)
     {
         String recordTypeName = RestAPIUtils.getObjectRecordTypeName(objectId);
@@ -128,7 +128,7 @@ public with sharing class RelatedListDataGridController {
     * Return the the related list items
     * */
     @AuraEnabled
-    public static Object[] getReleatedListItems(Id objectId, 
+    public static Object[] getRelatedListItems(Id objectId, 
                                                 String relatedlistName)
     {            
         Object[] items = RestAPIUtils.getRelatedListItems(objectId, 
@@ -257,7 +257,12 @@ public with sharing class RelatedListDataGridController {
     {  
         List<SObject> sObjectsItems = new List<SObject>();
          
-        Object[] items = getReleatedListItems(objectId,relatedlistName);
+        Object[] items = getRelatedListItems(objectId,relatedlistName);
+        
+        if(items == null){
+        	return true;    
+        }
+        
         for(Object obj : items) {
             Map<String, Object> mObj = (Map<String, Object>)obj;
             
@@ -268,7 +273,7 @@ public with sharing class RelatedListDataGridController {
             
             //Check blank fields
             //Source Account blank , delete (Investor)
-            if(objType.getDescribe().getName() == 'Investor_c' && mObj.get('Source_Account__c') == null){
+            if(objType.getDescribe().getName() == 'Investor__c' && mObj.get('Source_Account__c') == null){
                 sObjectsItems.add(sObj);
             }
             

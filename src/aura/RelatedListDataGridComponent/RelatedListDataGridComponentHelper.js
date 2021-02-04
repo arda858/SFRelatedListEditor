@@ -4,29 +4,40 @@
         var gridContainer = component.find("gridContainer");
         $A.util.toggleClass(gridContainer, "shadow-effect");
     },
-    toogleEditButton : function(component, event){
+    toggleEditButton : function(component, event){
         //Show/hide the edit button
         var editButton = component.find("editButton");
         $A.util.toggleClass(editButton, "hidden");
     },   
-    toogleGridActions : function(component, event){
+    toggleGridActions : function(component, event){
         //Show/hide the action bar on the bottom
         var gridActions = component.find("gridActions");
         $A.util.toggleClass(gridActions, "hidden");
     },
+    toggleNewButton : function(component, event){
+        //Show/hide the create buttons
+        var createButton = component.find("createButton");
+        $A.util.toggleClass(createButton, "hidden");
+        var createButton2 = component.find("createButton2");
+        $A.util.toggleClass(createButton2, "hidden");
+        
+    },   
     refreshUIElements : function(component, event){
         //Apply the shadow on the grid
         this.applyShadowEffect(component, event);
         
-        //Toogle the edit button
-        this.toogleEditButton(component, event);
+        //toggle the edit button
+        this.toggleEditButton(component, event);
         
-        //Toogle the grid actions
-        this.toogleGridActions(component, event);
+        //toggle the grid actions
+        this.toggleGridActions(component, event);
+        
+        //toggle the create actions
+        this.toggleNewButton(component, event);
     },
     loadItems : function(component){
         //Load items from Salesforce
-        var dataAction = component.get("c.getReleatedListItems");
+        var dataAction = component.get("c.getRelatedListItems");
         dataAction.setParams({
             "objectId": component.get("v.recordId"),
             "relatedlistName": component.get("v.relatedListName")
@@ -58,7 +69,7 @@
     },
     loadItemsAfterNew : function(component){
         //Load items from Salesforce
-        var dataAction = component.get("c.getReleatedListItems");
+        var dataAction = component.get("c.getRelatedListItems");
         dataAction.setParams({
             "objectId": component.get("v.recordId"),
             "relatedlistName": component.get("v.relatedListName")
@@ -75,6 +86,34 @@
                  //Refresh the items
                 this.refreshItems(component, component.get("v.items"), "write");               
  
+            }
+            else if (res.getState() === "ERROR") {
+                $A.log("Errors", res.getError());
+            }
+        });   
+        
+        $A.enqueueAction(dataAction);    
+    },
+    loadItemsAfterCancel : function(component){
+        //Load items from Salesforce
+        var dataAction = component.get("c.getRelatedListItems");
+        dataAction.setParams({
+            "objectId": component.get("v.recordId"),
+            "relatedlistName": component.get("v.relatedListName")
+        });	
+        dataAction.setCallback(this, function(res) {                        
+            if (res.getState() === "SUCCESS") {                 
+                var gridContainer = component.find("gridContainer");
+                if (res.getReturnValue() != null){
+                    res.getReturnValue().sort((a, b) => (a.Name > b.Name) ? 1 : -1)
+                }
+                component.set("v.items", res.getReturnValue() ); 
+                //Start Edit mode
+                component.set("v.oldItems",  res.getReturnValue()); 
+                 //Refresh the items
+                this.refreshItems(component, component.get("v.items"), "read");               
+         		this.refreshUIElements(component, event);        
+
             }
             else if (res.getState() === "ERROR") {
                 $A.log("Errors", res.getError());
@@ -102,6 +141,7 @@
     },
     refreshItems : function(component, items, displayMode){
         //Set the display mode
+        console.log("in refresh");
         component.set("v.displayMode", displayMode); 
         
         //Refresh the items        
@@ -109,11 +149,21 @@
     },
     getCellComponents : function(component){
         var cellComponents = [];
-        component.find("row").forEach(function(row){
+        var rows = [];
+        var foundRows = component.find("row");
+        console.log(foundRows.length)
+        if(foundRows.length){
+            rows = foundRows; 
+        }
+        else{
+            rows.push( foundRows)
+        }
+        rows.forEach(function(row){
             row.get("v.body").forEach(function(cell){
                 cellComponents.push(cell);
             })
         });
+      
         
         return cellComponents;
     },
@@ -128,7 +178,8 @@
         
         return true;
     },
-    updateItems : function(component){        
+    updateItems : function(component){
+        console.log("in update")        
         var items = component.get("v.items");
         var cellComponents = this.getCellComponents(component);
         

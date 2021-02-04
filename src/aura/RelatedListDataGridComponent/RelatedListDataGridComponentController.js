@@ -11,7 +11,7 @@
         //the metadata as well
         else{
             if(component.get("v.relatedListLabel")){
-                var metadataAction = component.get("c.getReleatedListMetadata");
+                var metadataAction = component.get("c.getRelatedListMetadata");
                 
                 metadataAction.setParams({
                     "objectId": component.get("v.recordId"),
@@ -51,7 +51,7 @@
             function deleteCallback(status, errors){
                 if(status=="SUCCESS"){
                     //Refresh the items                   
-                    helper.loadItemsAfterNew(component);      
+                    helper.loadItemsAfterCancel(component);      
                 }
                 if(status=="ERROR"){                      
                     var errMsg = null;
@@ -76,9 +76,7 @@
         
         
 		helper.deleteEmptyItems(component,deleteCallback)        
-        helper.refreshItems(component, component.get("v.oldItems"), "read");                       
-        helper.refreshUIElements(component, event);        
-    },
+     },
     saveEdit : function(component, event, helper) {                       
         if(helper.checkItems(component)){
             //Update the items
@@ -136,22 +134,7 @@
             toastEvent.fire();
         }
     },
-    createItem : function(component, event, helper){
- 		var recordTypeId = event.getSource().get('v.value');
 
-        var createRecordEvent = $A.get("e.force:createRecord");
-        createRecordEvent.setParams({
-            "entityApiName": component.get("v.relatedObjectName"),
-            "recordTypeId":recordTypeId,
-            "defaultFieldValues": {
-                'Target_Lead__c' : component.get("v.recordId"),
-                'Lead__c' : component.get("v.recordId")
-                
-            }
-        });
-        
-        createRecordEvent.fire();
-    },
     createAndAddItem : function(component, event, helper){
 
             //Update the items
