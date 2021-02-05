@@ -94,7 +94,7 @@
         
         $A.enqueueAction(dataAction);    
     },
-    loadItemsAfterCancel : function(component){
+    loadItemsAfterSave : function(component){
         //Load items from Salesforce
         var dataAction = component.get("c.getRelatedListItems");
         dataAction.setParams({
@@ -121,23 +121,6 @@
         });   
         
         $A.enqueueAction(dataAction);    
-    },
-    deleteEmptyItems : function(component,deleteCallback){
-        //Load items from Salesforce
-        var deleteAction = component.get("c.deleteEmptyRelatedListItems");
-
-        deleteAction.setParams({
-            "objectId": component.get("v.recordId"),
-            "relatedlistName": component.get("v.relatedListName")
-        });	
-        
-        deleteAction.setCallback(this, function(res) {            
-            deleteCallback(res.getState(), res.getError());
-        });   
-        console.log(deleteAction)
-
-        $A.enqueueAction(deleteAction);
-        
     },
     refreshItems : function(component, items, displayMode){
         //Set the display mode
