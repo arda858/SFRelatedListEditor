@@ -10,12 +10,23 @@
         //Otherwise we have to load 
         //the metadata as well
         else{
+            console.log("else")
             if(component.get("v.relatedListLabel")){
                 var metadataAction = component.get("c.getRelatedListMetadata");
                 
+                
+                var recordId = component.get("v.recordId");
+                var relatedListLabel = component.get("v.relatedListLabel") ;
+                
+                if(relatedListLabel.includes(":")){
+                    recordId = component.get("v.simpleRecord.AccountId");
+                    relatedListLabel = relatedListLabel.split(":")[1];
+                }
+                
+                console.log(recordId+" "+relatedListLabel)
                 metadataAction.setParams({
-                    "objectId": component.get("v.recordId"),
-                    "relatedListLabel": component.get("v.relatedListLabel")
+                    "objectId": recordId,
+                    "relatedListLabel": relatedListLabel
                 });
                 
                 metadataAction.setCallback(this, function(res) {            

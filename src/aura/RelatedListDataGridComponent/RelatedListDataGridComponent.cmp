@@ -4,6 +4,20 @@
     <aura:attribute name="relatedListLabel" type="String" access="global"/> 
     <aura:attribute name="relatedObjectName" type="String" default=""/> 
     <aura:attribute name="relatedListName" type="String"/> 
+ 
+    
+    <!--LOAD AccountID for Oppt Records -->
+    <aura:attribute name="record" type="Object"/>
+    <aura:attribute name="simpleRecord" type="Object"/>
+    <aura:attribute name="recordError" type="String"/>
+ 
+    <force:recordData aura:id="recordLoader"
+                      fields="AccountId"
+                      recordId="{!v.recordId}"
+                      targetFields="{!v.simpleRecord}"
+                      targetError="{!v.recordError}"
+                      recordUpdated="{!c.doInit}"
+                      />
     
     <aura:attribute name="columns" type="Object[]"/>
     <aura:attribute name="items" type="Object[]"/>
@@ -11,8 +25,6 @@
     
     <aura:attribute name="displayMode" type="String" default="read"/>
     
-    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
-    <aura:handler event="force:refreshView" action="{!c.doInit}" />    
     
     <article aura:id="gridContainer" class="slds-card hidden">
         <div class="slds-card__header slds-grid">
@@ -28,18 +40,18 @@
                                       title="Edit"
                                       onclick="{! c.startEdit }" 
                                       label="Edit" />
-                <aura:if isTrue="{!v.relatedListLabel=='Vendor Relationships'}">
+                <aura:if isTrue="{!v.relatedListLabel=='Vendor Relationships' ||  v.relatedListLabel=='Account:Vendor Relationships (Account)'}">
                     <lightning:button aura:id="createButton" class="hidden"
                                       onclick="{! c.createAndAddItem }"
                                       label="New Vendor" />
                 </aura:if>              
-                <aura:if isTrue="{!v.relatedListLabel=='Investors'}">
+                <aura:if isTrue="{!v.relatedListLabel=='Investors' || v.relatedListLabel=='Account:Investors (Target Account)'}">
                     <lightning:button aura:id="createButton" class="hidden"
                                       onclick="{! c.createAndAddItem }"
                                       value = "0123Z0000015JXpQAM"
                                       label="New Investor" />
                 </aura:if>
-                <aura:if isTrue="{!v.relatedListLabel=='Competitors/Lenders'}">
+                <aura:if isTrue="{!v.relatedListLabel=='Competitors/Lenders'  ||  v.relatedListLabel=='Account:Competitors/Lenders (Account)'}">
                     <lightning:button aura:id="createButton" class="hidden"
                                       onclick="{! c.createAndAddItem }"
                                       value="0123Z0000015JYOQA2"                                                          				

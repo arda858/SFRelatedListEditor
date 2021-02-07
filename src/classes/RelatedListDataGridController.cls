@@ -130,10 +130,9 @@ public with sharing class RelatedListDataGridController {
     @AuraEnabled
     public static Object[] getRelatedListItems(Id objectId, 
                                                 String relatedlistName)
-    {            
+    {
         Object[] items = RestAPIUtils.getRelatedListItems(objectId, 
-                                                              relatedlistName);
-        
+                                                              relatedlistName); 
         if(items.size()>0){        
             Id firstChildId = (Id)((Map<String, Object>) items.get(0)).get('Id');            
         	DescribeSObjectResult objectDescResult = firstChildId.getSobjectType().getDescribe();

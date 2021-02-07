@@ -35,13 +35,30 @@
         //toggle the create actions
         this.toggleNewButton(component, event);
     },
+    prepareListParams: function(component){
+        var recordId = component.get("v.recordId");
+        var relatedListLabel = component.get("v.relatedListLabel") ;
+        var relatedListName = component.get("v.relatedListName") ;
+
+        if(relatedListLabel.includes(":")){
+            recordId = component.get("v.simpleRecord.AccountId");
+        }
+        console.log(params)  
+        
+        var params = {
+            "objectId": recordId,
+            "relatedlistName": relatedListName
+        }
+                console.log(params)  
+
+        return params;
+    },
     loadItems : function(component){
         //Load items from Salesforce
         var dataAction = component.get("c.getRelatedListItems");
-        dataAction.setParams({
-            "objectId": component.get("v.recordId"),
-            "relatedlistName": component.get("v.relatedListName")
-        });	
+
+        dataAction.setParams(this.prepareListParams(component));
+        
         dataAction.setCallback(this, function(res) {                        
             if (res.getState() === "SUCCESS") {                 
                 var gridContainer = component.find("gridContainer");
@@ -70,10 +87,8 @@
     loadItemsAfterNew : function(component){
         //Load items from Salesforce
         var dataAction = component.get("c.getRelatedListItems");
-        dataAction.setParams({
-            "objectId": component.get("v.recordId"),
-            "relatedlistName": component.get("v.relatedListName")
-        });	
+        dataAction.setParams(this.prepareListParams(component));
+
         dataAction.setCallback(this, function(res) {                        
             if (res.getState() === "SUCCESS") {                 
                 var gridContainer = component.find("gridContainer");
@@ -97,10 +112,8 @@
     loadItemsAfterSave : function(component){
         //Load items from Salesforce
         var dataAction = component.get("c.getRelatedListItems");
-        dataAction.setParams({
-            "objectId": component.get("v.recordId"),
-            "relatedlistName": component.get("v.relatedListName")
-        });	
+        dataAction.setParams(this.prepareListParams(component));
+
         dataAction.setCallback(this, function(res) {                        
             if (res.getState() === "SUCCESS") {                 
                 var gridContainer = component.find("gridContainer");
@@ -196,16 +209,27 @@
     },
     createAndAddItem : function(component, recordTypeId, createCallback){
         //Save items on Salesforce
-        
+        var recordId = component.get("v.recordId");
+
         var newItem = {
             'objName' : component.get("v.relatedObjectName"),
-            'RecordTypeId' : recordTypeId,
-			'Target_Lead__c' : component.get("v.recordId"),
-            'Lead__c' : component.get("v.recordId"),
-
+            'RecordTypeId' : recordTypeId
         }
-		
-            
+        
+        switch( recordId.substring(0, 3)) {
+            case '00Q':
+                newItem['Target_Lead__c'] = recordId;
+                newItem['Lead__c'] = recordId;
+                break;        
+            case '006':
+                newItem['Opportunity__c'] = recordId;
+                newItem['Target_Account__c'] = component.get("v.simpleRecord.AccountId");;
+                newItem['Account__c'] = component.get("v.simpleRecord.AccountId");;
+
+                break;   
+        }
+       
+              
         console.log(newItem)
         var createAndAddItemAction = component.get("c.createNewItem");
         
