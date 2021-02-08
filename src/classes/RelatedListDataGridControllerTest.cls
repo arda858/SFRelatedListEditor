@@ -1,35 +1,35 @@
 @isTest
 public class RelatedListDataGridControllerTest {
- 	static testMethod void testGetReleatedListsMetadata()
+ 	static testMethod void testGetRelatedListsMetadata()
     {
 		Test.startTest();        
         Test.setMock(HttpCalloutMock.class, new RestAPIMockHttpResponseGenerator());        
                 
-        Object[] relatedListsMatadata = RelatedListDataGridController.getReleatedListsMetadata('0010Y000003iFovQAE');
+        Object[] relatedListsMatadata = RelatedListDataGridController.getRelatedListsMetadata('0010Y000003iFovQAE');
 		System.assertEquals(7, relatedListsMatadata.size());        
         
         Test.stopTest();        
     }
     
     
-    static testMethod void testGetReleatedListMetadata()
+    static testMethod void testGetRelatedListMetadata()
     {
         Test.startTest();        
         Test.setMock(HttpCalloutMock.class, new RestAPIMockHttpResponseGenerator());        
                 
-        Object relatedListsMatadata = RelatedListDataGridController.getReleatedListMetadata('0010Y000003iFovQAE',
+        Object relatedListsMatadata = RelatedListDataGridController.getRelatedListMetadata('0010Y000003iFovQAE',
                                                                                             'Contacts');
 		System.assertEquals(true, relatedListsMatadata != null);        
         
         Test.stopTest();         
     }
     
-    static testMethod void testGetReleatedListItems()
+    static testMethod void testGetRelatedListItems()
     {
         Test.startTest();
         Test.setMock(HttpCalloutMock.class, new RestAPIMockHttpResponseGenerator());        
         
-        Object[] contacts = RelatedListDataGridController.getReleatedListItems('0010Y000003iFovQAE', 
+        Object[] contacts = RelatedListDataGridController.getRelatedListItems('0010Y000003iFovQAE', 
                                                                                'Contacts');        
 		System.assertEquals(1, contacts.size());         
         
@@ -42,7 +42,7 @@ public class RelatedListDataGridControllerTest {
         Test.startTest();
         Test.setMock(HttpCalloutMock.class, new RestAPIMockHttpResponseGenerator());        
         
-        Object[] contacts = RelatedListDataGridController.getReleatedListItems('0010Y000003iFovQAE', 
+        Object[] contacts = RelatedListDataGridController.getRelatedListItems('0010Y000003iFovQAE', 
                                                                                'Contacts');                
 		Account account = new Account();
         account.Name='Test Account' ;
