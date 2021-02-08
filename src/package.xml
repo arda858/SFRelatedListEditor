@@ -14,7 +14,6 @@
 		<name>ApexPage</name>
 	</types>
 	<types>
-		<members>RelatedListDataGridsComponent</members>
 		<members>RelatedListDataGridComponent</members>		
 		<members>DataGridRowComponent</members>
 		<members>DataGridCellComponent</members>
