@@ -14,7 +14,7 @@ public with sharing class RelatedListDataGridController {
         typesMap.put(Schema.DisplayType.EMAIL, 'Email');
         typesMap.put(Schema.DisplayType.INTEGER, 'Integer');
         typesMap.put(Schema.DisplayType.PERCENT, 'Percent');
-        typesMap.put(Schema.DisplayType.MULTIPICKLIST, 'Multi PickList');
+        typesMap.put(Schema.DisplayType.MULTIPICKLIST, 'MultiPicklist');
         typesMap.put(Schema.DisplayType.PICKLIST, 'PickList');
         typesMap.put(Schema.DisplayType.PHONE, 'Phone');
         typesMap.put(Schema.DisplayType.REFERENCE, 'Reference');

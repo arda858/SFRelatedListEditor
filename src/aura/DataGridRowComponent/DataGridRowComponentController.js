@@ -33,7 +33,9 @@
                     return "c:DataGridDatetimeCellComponent";
                 case 'PickList':
                     return "c:DataGridPickListCellComponent";
-                case 'Reference':
+                case 'MultiPicklist':
+                    return "c:DataGridMultiPickListCellComponent";
+				case 'Reference':
                     return "c:DataGridReferenceCellComponent";
                 case 'ItemLink':
                     return "c:DataGridItemLinkCellComponent";

@@ -29,6 +29,7 @@
 		<members>DataGridPercentCellComponent</members>
 		<members>DataGridPhoneCellComponent</members>
 		<members>DataGridPickListCellComponent</members>
+		<members>DataGridMultiPickListCellComponent</members>
 		<members>DataGridReferenceCellComponent</members>		
 		<members>DataGridStringCellComponent</members>
 		<members>DataGridTextAreaCellComponent</members>
