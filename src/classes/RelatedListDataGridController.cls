@@ -223,19 +223,19 @@ public with sharing class RelatedListDataGridController {
             
             //Check blank fields
             //Source Account blank , delete (Investor)
-            if(objType.getDescribe().getName() == 'Investor__c' && mObj.get('Source_Account__c') == null){
+            if(objType.getDescribe().getName() == 'Investor__c' && mObj.get('Source_Account__c') == null  && mObj.get('Round_Invested__c') == null && mObj.get('Equity__c') == null && mObj.get('Amount_Invested__c') == null && mObj.get('Description__c') == null){
                 sObjectsDeleteItems.add(sObj);
                 continue;
             }
             
             //Competitor/Lender	blank, delete (Competitor/Lender)
-            if(objType.getDescribe().getName() == 'Competitor_Committee_Current_Lender__c' && mObj.get('Competitor_Committee_Lender_Account__c') == null){
+            if(objType.getDescribe().getName() == 'Competitor_Committee_Current_Lender__c' && mObj.get('Competitor_Committee_Lender_Account__c') == null && mObj.get('Amount_Outstanding__c') == null && mObj.get('Maturity_Date__c') == null && mObj.get('Reason_for_Leaving__c') == null && mObj.get('Misc__c') == null){
                 sObjectsDeleteItems.add(sObj);
                 continue;
            }
             
             //Vendor Account blank, delete (Vendor Relationship)
-            if(objType.getDescribe().getName() == 'Vendor_Relationship__c' && mObj.get('Vendor__c') == null  && mObj.get('Description__c') == null){
+            if(objType.getDescribe().getName() == 'Vendor_Relationship__c' && mObj.get('Vendor__c') == null  && mObj.get('Sentiment__c') == null && mObj.get('Description__c') == null){
                 sObjectsDeleteItems.add(sObj);
                 continue;
            }
