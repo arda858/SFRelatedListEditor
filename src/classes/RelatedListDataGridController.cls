@@ -223,7 +223,7 @@ public with sharing class RelatedListDataGridController {
             
             //Check blank fields
             //Source Account blank , delete (Investor)
-            if(objType.getDescribe().getName() == 'Investor__c' && mObj.get('Source_Account__c') == null  && mObj.get('Round_Invested__c') == null && mObj.get('Equity__c') == null && mObj.get('Amount_Invested__c') == null && mObj.get('Description__c') == null){
+            if(objType.getDescribe().getName() == 'Investor__c' && mObj.get('Source_Account__c') == null  && mObj.get('Round_Invested__c')  == '' && mObj.get('Equity__c') == null && mObj.get('Amount_Invested__c') == null && mObj.get('Description__c') == null){
                 sObjectsDeleteItems.add(sObj);
                 continue;
             }
