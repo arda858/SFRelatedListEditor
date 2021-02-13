@@ -1,5 +1,5 @@
 <aura:component extends="c:DataGridCellComponent">
-    <aura:if isTrue="{!v.displayMode == 'read'}">
+    <aura:if isTrue="{!v.displayMode == 'read' || (v.item.RecordTypeId == '0123Z0000015JYOQA2' &amp;&amp; v.label == 'Reason for Leaving')}">
         <ui:outputTextArea aura:id="outputCell" value="{!v.value}"/>
         <aura:set attribute="else">
             <ui:inputTextArea aura:id="inputCell" value="{!v.value}" maxlength="{!v.length}" change="{!c.checkInput}"/>
