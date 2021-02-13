@@ -1,5 +1,5 @@
 <aura:component extends="c:DataGridCellComponent">
-    <aura:if isTrue="{!v.displayMode == 'read' || (v.item.RecordTypeId == '0123Z0000015JYOQA2' &amp;&amp; v.label == 'Amount Outstanding') }">
+    <aura:if isTrue="{!v.displayMode == 'read' || (v.item.RecordTypeId == '0123Z0000015JYEQA2' &amp;&amp; v.label == 'Amount Outstanding') }">
         <ui:outputCurrency format="$##,##,###,###" aura:id="outputCell" value="{!v.value}"/>
         <aura:set attribute="else">
             <ui:inputCurrency format="$##,##,###,###" aura:id="inputCell" value="{!v.value}" change="{!c.checkInput}"/>

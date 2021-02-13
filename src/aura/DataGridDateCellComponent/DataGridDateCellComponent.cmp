@@ -1,5 +1,5 @@
 <aura:component extends="c:DataGridCellComponent">
-    <aura:if isTrue="{!v.displayMode == 'read' || (v.item.RecordTypeId == '0123Z0000015JYOQA2' &amp;&amp; v.label == 'Maturity Date')}">
+    <aura:if isTrue="{!v.displayMode == 'read' || (v.item.RecordTypeId == '0123Z0000015JYEQA2' &amp;&amp; v.label == 'Maturity Date')}">
         <ui:outputDate aura:id="outputCell" value="{!v.value}" format="MM/dd/yyyy"/>
         <aura:set attribute="else">
             <ui:inputDate aura:id="inputCell" value="{!v.value}" format="MM/dd/yyyy" displayDatePicker="true" change="{!c.checkInput}"/>
