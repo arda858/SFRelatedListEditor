@@ -45,7 +45,7 @@
                                       onclick="{! c.createAndAddItem }"
                                       label="New Vendor" />
                 </aura:if>              
-                <aura:if isTrue="{!v.relatedListLabel=='Investors' || v.relatedListLabel=='Account:Investors (Target Account)'}">
+                <aura:if isTrue="{!v.relatedListLabel=='Investors' || v.relatedListLabel=='Account:Investors (Target Account)' || v.relatedListLabel=='Account:Investors'}">
                     <lightning:button aura:id="createButton" class="hidden"
                                       onclick="{! c.createAndAddItem }"
                                       value = "0123Z0000015JXpQAM"
