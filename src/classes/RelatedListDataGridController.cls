@@ -206,7 +206,7 @@ public with sharing class RelatedListDataGridController {
     * Save the related list items
     * */
     @AuraEnabled
-    public static boolean saveRelatedListItems(String jsonData)
+    public static boolean saveRelatedListItems(String jsonData, boolean keepunchanged)
     {
         List<SObject> sObjectsItems = new List<SObject>();
         List<SObject> sObjectsDeleteItems = new List<SObject>();
@@ -221,6 +221,8 @@ public with sharing class RelatedListDataGridController {
             Schema.SObjectType objType = objId.getSobjectType();
             SObject sObj = objType.newSObject(objId);
             
+			
+			if(!keepunchanged){
             //Check blank fields
             //Source Account blank , delete (Investor)
             if(objType.getDescribe().getName() == 'Investor__c' && mObj.get('Source_Account__c') == null  && mObj.get('Round_Invested__c')  == '' && mObj.get('Equity__c') == null && mObj.get('Amount_Invested__c') == null && mObj.get('Description__c') == null){
@@ -239,7 +241,7 @@ public with sharing class RelatedListDataGridController {
                 sObjectsDeleteItems.add(sObj);
                 continue;
            }
-            
+           } 
             
             
             //Update the fields

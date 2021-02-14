@@ -103,8 +103,8 @@
                 }
             }        
             
-            //Save items in the backend
-            helper.saveItems(component, items, saveCallback);
+            //Save items in the backend, don't keep unchanged records
+            helper.saveItems(component, items, saveCallback, false);
         }else{
             var toastEvent = $A.get("e.force:showToast");
             toastEvent.setParams({
@@ -154,7 +154,7 @@
                     }
                 }        
                 
-                //Save items in the backend
+                //Create new item
                 helper.createAndAddItem(component, recordTypeId, createCallback);  
               
             }
@@ -179,8 +179,8 @@
             }
         }        
         
-        
-        helper.saveItems(component, items, saveCallback);
+        //Save items, keep unchanged records
+        helper.saveItems(component, items, saveCallback, true);
       
     }
 })

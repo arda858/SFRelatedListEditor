@@ -193,12 +193,13 @@
         
         return items;
     },
-    saveItems : function(component, items, saveCallback){
+    saveItems : function(component, items, saveCallback, keepunchanged){
         //Save items on Salesforce
         var saveItemsAction = component.get("c.saveRelatedListItems");
         console.log(component.get("v.items"))
         saveItemsAction.setParams({
-            "jsonData": JSON.stringify(component.get("v.items"))
+            "jsonData": JSON.stringify(component.get("v.items")),
+            "keepunchanged": keepunchanged
         });	
         
         saveItemsAction.setCallback(this, function(res) {            
