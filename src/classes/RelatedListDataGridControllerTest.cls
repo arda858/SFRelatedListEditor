@@ -59,7 +59,7 @@ public class RelatedListDataGridControllerTest {
         mContact.put('Id', contact.Id);        
         mContact.remove('OwnerId');
         
-		Boolean result = RelatedListDataGridController.saveRelatedListItems(System.JSON.serialize(contacts));
+		Boolean result = RelatedListDataGridController.saveRelatedListItems(System.JSON.serialize(contacts),true);
         System.assertEquals(true, result);
         
         Object[] candidates = RelatedListDataGridController.getLookupCandidates('Account', 'Test');
