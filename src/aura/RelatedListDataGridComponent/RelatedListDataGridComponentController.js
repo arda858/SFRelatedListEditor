@@ -118,9 +118,13 @@
     },
 
     createAndAddItem : function(component, event, helper){
-        //1- Save existing changes
         var items = helper.updateItems(component);
         
+        //SAVE EXISTING ITEMS IF ANY
+        if(items)
+        {
+            
+		//1- Save existing changes
         //OnSave items callback
         function saveCallback(status, errors){
             if(status=="SUCCESS"){
@@ -181,6 +185,44 @@
         
         //Save items, keep unchanged records
         helper.saveItems(component, items, saveCallback, true);
-      
+              }
+        //CREATE WITHOUT SAVING
+        else{
+            
+                //2- Add new record
+                var recordTypeId = event.getSource().get('v.value');
+                
+                //On create items callback
+                function createCallback(status, errors){
+                    if(status=="SUCCESS"){
+                        //Refresh the items                   
+                        helper.loadItemsAfterNew(component);      
+                    }
+                    if(status=="ERROR"){                      
+                        var errMsg = null;
+                        
+                        if(errors[0] && errors[0].message){
+                            errMsg = errors[0].message;
+                        } 
+                        if(errors[0] && errors[0].pageErrors) {
+                            errMsg = errors[0].pageErrors[0].message;
+                        }
+                        
+                        var toastEvent = $A.get("e.force:showToast");
+                        toastEvent.setParams({
+                            "title": "Error!",
+                            "type" : "error",
+                            "mode" : "sticky",
+                            "message": "Server Error:" + errMsg
+                        });
+                        toastEvent.fire();                    
+                    }
+                }        
+                
+                //Create new item
+                helper.createAndAddItem(component, recordTypeId, createCallback);  
+              
+            
+        }
     }
 })

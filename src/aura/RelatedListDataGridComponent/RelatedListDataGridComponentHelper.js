@@ -147,7 +147,11 @@
         var cellComponents = [];
         var rows = [];
         var foundRows = component.find("row");
-        console.log(foundRows.length)
+        
+        console.log("getCellComponents");
+        console.log(foundRows);
+        
+        if(foundRows){
         if(foundRows.length){
             rows = foundRows; 
         }
@@ -159,12 +163,15 @@
                 cellComponents.push(cell);
             })
         });
-      
+        }
+        
         
         return cellComponents;
     },
     checkItems : function(component){
-        var cellComponents = this.getCellComponents(component);        
+        var cellComponents = this.getCellComponents(component);  
+
+        
         for(var c=0; c < cellComponents.length; c++){
             var cellCmp = cellComponents[c];
             if (cellCmp.get("v.hasErrors")){
@@ -197,6 +204,7 @@
         //Save items on Salesforce
         var saveItemsAction = component.get("c.saveRelatedListItems");
         console.log(component.get("v.items"))
+        
         saveItemsAction.setParams({
             "jsonData": JSON.stringify(component.get("v.items")),
             "keepunchanged": keepunchanged
