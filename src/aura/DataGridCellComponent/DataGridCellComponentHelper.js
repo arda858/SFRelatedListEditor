@@ -11,8 +11,10 @@
         component.set("v.required", JSON.parse(column.required));
         //Set the length for String field
         component.set("v.length", JSON.parse(column.length));
-        //Set the options for Picklist field
-        component.set("v.options", JSON.parse(column.options));
+		//Set the options for Picklist field
+        var theoptions = JSON.parse(column.options)
+        theoptions.unshift({"active":true,"defaultValue":false,"label":"","validFor":null,"value":""});
+        component.set("v.options", theoptions);
         //Set the digits for Integer field
         component.set("v.digits", JSON.parse(column.digits));
         //Set the precision for Integer field
