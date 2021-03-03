@@ -40,7 +40,7 @@
                                       title="Edit"
                                       onclick="{! c.startEdit }" 
                                       label="Edit" />
-                <aura:if isTrue="{!v.relatedListLabel=='Vendor Relationships' ||  v.relatedListLabel=='Account:Vendor Relationships (Account)'}">
+                <aura:if isTrue="{!v.relatedListLabel=='Vendor Relationships' || v.relatedListLabel=='Vendor Relationships (Account)' ||  v.relatedListLabel=='Account:Vendor Relationships (Account)'}">
                     <lightning:button aura:id="createButton" class="hidden"
                                       onclick="{! c.createAndAddItem }"
                                       label="New Vendor" />
@@ -51,7 +51,7 @@
                                       value = "0123Z0000015JXpQAM"
                                       label="New Investor" />
                 </aura:if>
-                <aura:if isTrue="{!v.relatedListLabel=='Competitors/Current Lenders'  ||  v.relatedListLabel=='Account:Competitors/Current Lenders (Account)'}">
+                <aura:if isTrue="{!v.relatedListLabel=='Competitors/Current Lenders'  || v.relatedListLabel=='Competitors/Current Lenders (Account)'  ||   v.relatedListLabel=='Account:Competitors/Current Lenders (Account)'}">
                     <lightning:button aura:id="createButton" class="hidden"
                                       onclick="{! c.createAndAddItem }"
                                       value="0123Z0000015JYOQA2"                                                          				

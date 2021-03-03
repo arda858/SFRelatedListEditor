@@ -23,10 +23,10 @@ public with sharing class RelatedListDataGridController {
     
     /**
     * Clean the related list metadata
-	* -If the field is AutoNumber or Calculated set the type to Formula. Otherwise set the type from the map
-	* -If the column is not an inner field set the type to Reference
-	* -If the field is not accessible remove the field from columns list  
-	* */
+    * -If the field is AutoNumber or Calculated set the type to Formula. Otherwise set the type from the map
+    * -If the column is not an inner field set the type to Reference
+    * -If the field is not accessible remove the field from columns list  
+    * */
     private static void cleanRelatedListMetadata(Map<String, Object> mRelatedListMetadata)
     {
         Object[] columns = (Object[] )mRelatedListMetadata.get('columns');                
@@ -135,16 +135,16 @@ public with sharing class RelatedListDataGridController {
                                                               relatedlistName); 
         if(items.size()>0){        
             Id firstChildId = (Id)((Map<String, Object>) items.get(0)).get('Id');            
-        	DescribeSObjectResult objectDescResult = firstChildId.getSobjectType().getDescribe();
+            DescribeSObjectResult objectDescResult = firstChildId.getSobjectType().getDescribe();
             
-        	Map<String, DescribeFieldResult> lookupFields = new Map<String,DescribeFieldResult>();            
+            Map<String, DescribeFieldResult> lookupFields = new Map<String,DescribeFieldResult>();            
             for(Schema.SObjectField sfield : objectDescResult.fields.getMap().Values()){ 
                 DescribeFieldResult fieldDescResult = sfield.getDescribe();                
                 if(fieldDescResult.getType()==Schema.DisplayType.REFERENCE){                        
                     lookupFields.put(fieldDescResult.getName(), fieldDescResult);
                 }                                
             }   
-			
+            
             //Set the lookup labels based on the field type
             for(String fieldKey : lookupFields.keySet()){
                 Set<Id> lookupIds = new Set<Id>();
@@ -171,7 +171,7 @@ public with sharing class RelatedListDataGridController {
                     for(SObject lookupObj : lookupObjs){
                         for(Object item : lookupMap.get(lookupObj.Id)){
                             Map<String, Object> mItem = (Map<String, Object>) item;
-                            try{                            	
+                            try{                                
                                 mItem.put(fieldKey + '__Name', lookupObj.get('Name'));                                                                                        
                             }
                             catch(Exception e){
@@ -221,23 +221,23 @@ public with sharing class RelatedListDataGridController {
             Schema.SObjectType objType = objId.getSobjectType();
             SObject sObj = objType.newSObject(objId);
             
-			
-			if(!keepunchanged){
+            
+            if(!keepunchanged){
             //Check blank fields
             //Source Account blank , delete (Investor)
-            if(objType.getDescribe().getName() == 'Investor__c' && mObj.get('Source_Account__c') == null  && mObj.get('Round_Invested__c')  == '' && mObj.get('Equity__c') == null && mObj.get('Amount_Invested__c') == null && mObj.get('Description__c') == null){
+            if(objType.getDescribe().getName() == 'Investor__c' && mObj.get('Source_Account__c') == null  && mObj.get('Equity__c') == null && mObj.get('Amount_Invested__c') == null && mObj.get('Description__c') == null && mObj.get('New_Account__c') == null){
                 sObjectsDeleteItems.add(sObj);
                 continue;
             }
             
-            //Competitor/Lender	blank, delete (Competitor/Lender)
-            if(objType.getDescribe().getName() == 'Competitor_Committee_Current_Lender__c' && mObj.get('Competitor_Committee_Lender_Account__c') == null && mObj.get('Amount_Outstanding__c') == null && mObj.get('Maturity_Date__c') == null && mObj.get('Reason_for_Leaving__c') == null && mObj.get('Misc__c') == null){
+            //Competitor/Lender blank, delete (Competitor/Lender)
+            if(objType.getDescribe().getName() == 'Competitor_Committee_Current_Lender__c' && mObj.get('Competitor_Committee_Lender_Account__c') == null && mObj.get('Amount_Outstanding__c') == null && mObj.get('Maturity_Date__c') == null && mObj.get('Reason_for_Leaving__c') == null && mObj.get('Misc__c') == null && mObj.get('New_Account__c') == null){
                 sObjectsDeleteItems.add(sObj);
                 continue;
            }
             
             //Vendor Account blank, delete (Vendor Relationship)
-            if(objType.getDescribe().getName() == 'Vendor_Relationship__c' && mObj.get('Vendor__c') == null  && mObj.get('Sentiment__c') == null && mObj.get('Description__c') == null){
+            if(objType.getDescribe().getName() == 'Vendor_Relationship__c' && mObj.get('Vendor__c') == null  && mObj.get('Sentiment__c') == null && mObj.get('Description__c') == null && mObj.get('New_Account__c') == null){
                 sObjectsDeleteItems.add(sObj);
                 continue;
            }
@@ -275,12 +275,12 @@ public with sharing class RelatedListDataGridController {
     } 
      
 
-	/**
+    /**
     * Create new list item
     * */
     @AuraEnabled
     public static boolean createNewItem(String jsonData)
-    {	
+    {   
         
         
         Object obj = (Object)JSON.deserializeUntyped(jsonData);
@@ -313,10 +313,10 @@ public with sharing class RelatedListDataGridController {
      * Search Candiate for Lookup Field
      * */
     @AuraEnabled
-	public static Object[] getLookupCandidates(String refObjName, String searchTerm) {
+    public static Object[] getLookupCandidates(String refObjName, String searchTerm) {
         String soqlQuery = 'Select Id,Name From '+ refObjName+ 
             ' Where Name Like \'%' + searchTerm + '%\''+' Limit 5';
         
         return Database.query(soqlQuery);
-	}
+    }
 }
