@@ -229,11 +229,12 @@
             case '00Q':
                 newItem['Target_Lead__c'] = recordId;
                 newItem['Lead__c'] = recordId;
-                break;        
+            break;        
             case '006':
                 newItem['Opportunity__c'] = recordId;
-                newItem['Target_Account__c'] = component.get("v.simpleRecord.AccountId");;
-                newItem['Account__c'] = component.get("v.simpleRecord.AccountId");;
+                newItem['Target_Account__c'] = component.get("v.simpleRecord.AccountId");
+                newItem['Account__c'] = component.get("v.simpleRecord.AccountId");
+			break;        
  			case '001':
                 newItem['Target_Account__c'] = recordId
                 newItem['Account__c'] = recordId
